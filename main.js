@@ -252,8 +252,11 @@ class OchsnerWeb2com extends utils.Adapter {
             if (!this.gw) {
                 throw new Error('Adapter läuft nicht (Adresse fehlt?)');
             }
-            const r = await this.gw.read(oid);
-            result = { result: `${oid}: ${r.value}${r.unit ? ` ${r.unit}` : ''}${r.name ? ` – ${r.name}` : ''}${r.desc ? ` (${r.desc})` : ''}` };
+            // the whole group from this OID on, with the names the web2com knows (to find OIDs)
+            const list = await this.gw.readGroup(oid, 30);
+            const lines = list.map(r => `${r.oid}: ${r.value}${r.unit ? ` ${r.unit}` : ''}${r.name ? ` – ${r.name}` : ''}${r.desc ? ` (${r.desc})` : ''}`);
+            this.log.info(`OID lesen ${oid}:\n${lines.join('\n')}`);
+            result = { result: lines.join('\n') };
         } catch (err) {
             result = { error: `${oid}: ${err.message}` };
         }

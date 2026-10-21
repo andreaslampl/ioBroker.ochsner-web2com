@@ -117,9 +117,13 @@ test('adapter: reads all data points, writes modes and set point, forwards to KN
     assert.equal(gw.writes.length, 4);
 
     // admin: read any OID
-    adapter.emit('message', { command: 'read', from: 'system.adapter.admin.0', message: { oid: '/1/2/1/125/8' }, callback: { id: 1 } });
+    adapter.emit('message', { command: 'read', from: 'system.adapter.admin.0', message: { oid: '/1/2/1/125/7' }, callback: { id: 1 } });
     await until(() => adapter.sent.some(s => s.command === 'read'));
-    assert.match(adapter.sent.find(s => s.command === 'read').message.result, /\/1\/2\/1\/125\/8: 12\.75 MWh – Wärmemenge/);
+    // the group from this OID on, with names: here 125/7 and 125/8
+    const lines = adapter.sent.find(s => s.command === 'read').message.result.split('\n');
+    assert.equal(lines.length, 2);
+    assert.match(lines[0], /^\/1\/2\/1\/125\/7: 6\.4/);
+    assert.match(lines[1], /^\/1\/2\/1\/125\/8: 12\.75 MWh – Wärmemenge/);
 });
 
 test('adapter: wrong password -> not connected, clear message', async t => {

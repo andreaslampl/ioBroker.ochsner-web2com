@@ -47,9 +47,13 @@ Im Reiter **Datenpunkte** lässt sich die Liste ändern und erweitern (Name, OID
 schreibbar, Min/Max). Geschrieben wird nur, was als **schreibbar** markiert ist; Listen nehmen nur ihre
 Werte an, Zahlen nur Werte zwischen Min und Max. Nach dem Schreiben liest der Adapter den Wert zurück.
 
-**Weitere Datenpunkte finden:** im Reiter Verbindung eine OID eingeben und **OID lesen** – die
-Antwort zeigt Wert, Einheit und den Namen, den das web2com dafür kennt. Die OIDs stehen z. B. in der
-Adresszeile bzw. den Entwicklertools des Browsers, wenn man die web2com-Weboberfläche bedient.
+**Weitere Datenpunkte finden (z. B. Kühlen):** im Reiter Verbindung eine OID eingeben und
+**OID lesen** – die Antwort zeigt diese und die folgenden OIDs der Gruppe (bis zu 30) mit Wert,
+Einheit und dem Namen, den das web2com dafür kennt; dasselbe steht im Log. Beispiele zum Stöbern:
+`/1/3/4/107/0` (Fußbodenheizung Einstellungen), `/1/3/4/108/0` (Sollwerte), `/1/3/4/119/0`
+(Messwerte), `/1/2/1/125/0` (Wärmeerzeuger). Gefundene OIDs im Reiter Datenpunkte als neue Zeile
+eintragen. Alternativ zeigen die Entwicklertools des Browsers (Netzwerk) beim Bedienen der
+web2com-Weboberfläche, welche OID und welcher Wert gesendet werden.
 
 ## Weiterleitung an KNX (wie im Node-RED-Flow)
 
@@ -64,6 +68,9 @@ Pro Datenpunkt optional:
 Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-Flow vermerkt).
 
 ## Changelog
+
+### 0.1.1
+- „OID lesen“ zeigt die ganze Gruppe ab der OID mit Namen (zum Finden weiterer Datenpunkte, z. B. Kühlen).
 
 ### 0.1.0
 - Erste Version: Datenpunkte aus dem Node-RED-Flow, lesen und schreiben, Weiterleitung an KNX-Datenpunkte, OID lesen.

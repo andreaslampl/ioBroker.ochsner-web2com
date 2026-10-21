@@ -10,7 +10,7 @@
         "interval": { "type": "number", "label": "Poll interval (s)", "min": 10, "max": 3600, "default": 60, "xs": 12, "sm": 3 },
         "user": { "type": "text", "label": "User", "newLine": true, "xs": 12, "sm": 4 },
         "password": { "type": "password", "label": "Password", "xs": 12, "sm": 4 },
-        "testHelp": { "type": "staticText", "text": "Find more data points: enter an OID (e.g. /1/3/4/119/1) and read it. The answer shows value, unit and the name the web2com gives it. Save the settings first.", "newLine": true, "xs": 12 },
+        "testHelp": { "type": "staticText", "text": "Find more data points (e.g. cooling): enter an OID (e.g. /1/3/4/107/0) and read it. The answer lists this and the following OIDs of the group with value, unit and the name the web2com gives them (also in the log). Save the settings first.", "newLine": true, "xs": 12 },
         "testOid": { "type": "text", "label": "OID", "newLine": true, "xs": 12, "sm": 4 },
         "testRead": { "type": "sendTo", "label": "Read OID", "command": "read", "jsonData": "{\"oid\": \"${data.testOid}\"}", "showProcess": true, "useNative": false, "xs": 12, "sm": 3 }
       }

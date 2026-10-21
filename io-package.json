@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "news": {
+      "0.1.1": {
+        "en": "\"Read OID\" lists the whole group from that OID on, with names (to find more data points, e.g. cooling)",
+        "de": "„OID lesen“ zeigt die ganze Gruppe ab der OID mit Namen (zum Finden weiterer Datenpunkte, z. B. Kühlen)"
+      },
       "0.1.0": {
         "en": "First version: data points of the Ochsner web2com (read and write), forwarding to KNX states",
         "de": "Erste Version: Datenpunkte des Ochsner web2com (lesen und schreiben), Weiterleitung an KNX-Datenpunkte"

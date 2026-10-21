@@ -24,6 +24,8 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
 - 0.1.0: built from the flow only; not yet tested against the owner's real web2com. Open: whether
   dpCfg really carries name/unit, whether the gateway accepts our envelope exactly (the flow's write
   template had no <name/>/<prop/> tags in some places - both variants were used there).
+- 0.1.1: owner says there is cooling too (not in the flow, OIDs unknown) -> "OID lesen" reads a group
+  (getDpRequest count 30, the flow used count 10 too) and lists OID/name/value/unit to find them.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 

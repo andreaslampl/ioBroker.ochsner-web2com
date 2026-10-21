@@ -46,13 +46,17 @@ function fakeGateway({ values, user = 'admin', password = 'geheim', names = {} }
                 return;
             }
             if (body.includes('getDpRequest')) {
-                const index = oid.split('/').pop();
-                const n = names[oid] || { name: 'Wert', unit: '' };
-                res.end(
-                    env(
-                        `<ns:getDpResponse><ref><oid>${oid}</oid><prop>rw</prop></ref><dpCfg><index>${index}</index><name>${n.name}</name><prop>rw</prop><desc>${n.desc || ''}</desc><value>${gw.values[oid]}</value><unit>${n.unit}</unit><timestamp>0</timestamp></dpCfg></ns:getDpResponse>`,
-                    ),
-                );
+                // count > 1: the following indexes of the group as well (as far as they exist)
+                const count = Number((/<count>(\d+)<\/count>/.exec(body) || [])[1] || 1);
+                const base = oid.split('/').slice(0, -1).join('/');
+                const first = Number(oid.split('/').pop());
+                let cfg = '';
+                for (let i = first; i < first + count && `${base}/${i}` in gw.values; i++) {
+                    const o = `${base}/${i}`;
+                    const n = names[o] || { name: 'Wert', unit: '' };
+                    cfg += `<dpCfg><index>${i}</index><name>${n.name}</name><prop>rw</prop><desc>${n.desc || ''}</desc><value>${gw.values[o]}</value><unit>${n.unit}</unit><timestamp>0</timestamp></dpCfg>`;
+                }
+                res.end(env(`<ns:getDpResponse><ref><oid>${oid}</oid><prop>rw</prop></ref>${cfg}</ns:getDpResponse>`));
                 return;
             }
             if (body.includes('writeDpRequest')) {
