@@ -1,0 +1,365 @@
+{
+  "common": {
+    "name": "ochsner-web2com",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "First version: data points of the Ochsner web2com (read and write), forwarding to KNX states",
+        "de": "Erste Version: Datenpunkte des Ochsner web2com (lesen und schreiben), Weiterleitung an KNX-Datenpunkte"
+      }
+    },
+    "titleLang": {
+      "en": "Ochsner web2com",
+      "de": "Ochsner web2com"
+    },
+    "desc": {
+      "en": "Ochsner heat pumps via the local web2com gateway: read values, switch operating modes and set points",
+      "de": "Ochsner-Wärmepumpen über das lokale web2com-Gateway: Werte lesen, Betriebsarten und Sollwerte schreiben"
+    },
+    "authors": [
+      "andreaslampl"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "ochsner-web2com.png",
+    "extIcon": "https://raw.githubusercontent.com/andreaslampl/ioBroker.ochsner-web2com/main/admin/ochsner-web2com.png",
+    "readme": "https://github.com/andreaslampl/ioBroker.ochsner-web2com/blob/main/README.md",
+    "enabled": true,
+    "type": "climate-control",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "messagebox": true,
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=5.0.19"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=6.0.0"
+      }
+    ],
+    "tier": 2
+  },
+  "native": {
+    "host": "",
+    "user": "",
+    "password": "",
+    "interval": 60,
+    "datapoints": [
+      {
+        "oid": "/1/2/1/125/0",
+        "name": "Wärmeerzeuger Status",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Heizbetrieb;2=Vorlaufzeit Heizbetrieb;3=Extern gesperrt;4=Kühlbetrieb;5=Vorlaufzeit Kühlbetrieb;6=Vorlaufzeit Abtaubetrieb;7=Abtaubetrieb;8=Störung;9=Abtropfen;10=Abtausperrzeit",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/2/1/125/7",
+        "name": "Wärmeleistung kW",
+        "kind": "number",
+        "unit": "kW",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/2/1/125/8",
+        "name": "Wärmeleistung MW",
+        "kind": "number",
+        "unit": "",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/2/7/107/0",
+        "name": "Warmwasser Betriebsart",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Automatik;2=Normal;3=Nachheizbetrieb",
+        "write": true,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/2/7/121/1",
+        "name": "Warmwasser Temperatur",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/119/1",
+        "name": "Außentemperatur",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/107/0",
+        "name": "Fußbodenheizung Betriebsart",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Automatik;3=Nachheizbetrieb;4=Normal;5=Sparbetrieb;7=Handbetrieb Heizen",
+        "write": true,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/119/0",
+        "name": "Fußbodenheizung Status",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Normal Heizbetrieb;2=Komfort Heizbetrieb;3=Spar Heizbetrieb;4=Frostschutzbetrieb;5=Zwangsabnahme;6=Zwangsdrosselung;7=Ferienbetrieb;8=Partybetrieb;9=Normal Kühlbetrieb;10=Komfort Kühlbetrieb;11=Spar Kühlbetrieb;12=Störung;13=Handbetrieb;14=Schutz Kühlbetrieb;15=Partybetrieb Kühlen;16=Austrocknung Aufheizen;17=Austrocknung Stationär;18=Austrocknung Auskühlen;19=Austrocknung Endphase;20=Nachtlüftung;21=Belüftung;22=Kühlbetrieb extern;23=Heizbetrieb extern",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/119/3",
+        "name": "Raumtemperatur",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/119/7",
+        "name": "Raumfeuchtigkeit",
+        "kind": "number",
+        "unit": "%",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/108/4",
+        "name": "Raumtemperatur Soll",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": true,
+        "min": 10,
+        "max": 30,
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/119/5",
+        "name": "Vorlauf Fußbodenheizung",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/117/0",
+        "name": "Pumpe Fußbodenheizung",
+        "kind": "bool",
+        "unit": "",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/4/117/1",
+        "name": "Mischer Fußbodenheizung",
+        "kind": "number",
+        "unit": "",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/107/0",
+        "name": "Heizkörper Betriebsart",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Automatik;3=Nachheizbetrieb;4=Normal;5=Sparbetrieb;7=Handbetrieb Heizen",
+        "write": true,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/119/0",
+        "name": "Heizkörper Status",
+        "kind": "list",
+        "unit": "",
+        "texts": "0=Standby;1=Normal Heizbetrieb;2=Komfort Heizbetrieb;3=Spar Heizbetrieb;4=Frostschutzbetrieb;5=Zwangsabnahme;6=Zwangsdrosselung;7=Ferienbetrieb;8=Partybetrieb;9=Normal Kühlbetrieb;10=Komfort Kühlbetrieb;11=Spar Kühlbetrieb;12=Störung;13=Handbetrieb;14=Schutz Kühlbetrieb;15=Partybetrieb Kühlen;16=Austrocknung Aufheizen;17=Austrocknung Stationär;18=Austrocknung Auskühlen;19=Austrocknung Endphase;20=Nachtlüftung;21=Belüftung;22=Kühlbetrieb extern;23=Heizbetrieb extern",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/108/4",
+        "name": "Raumtemperatur KG",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/119/4",
+        "name": "Vorlauf Heizkörper",
+        "kind": "number",
+        "unit": "°C",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/117/0",
+        "name": "Pumpe Heizkörper",
+        "kind": "bool",
+        "unit": "",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      },
+      {
+        "oid": "/1/3/5/117/1",
+        "name": "Mischer Heizkörper",
+        "kind": "number",
+        "unit": "",
+        "texts": "",
+        "write": false,
+        "min": "",
+        "max": "",
+        "out": "",
+        "outText": false,
+        "in": ""
+      }
+    ]
+  },
+  "encryptedNative": [
+    "password"
+  ],
+  "protectedNative": [
+    "password"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": {
+          "en": "Connected to web2com",
+          "de": "Verbunden mit web2com"
+        },
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.lastPoll",
+      "type": "state",
+      "common": {
+        "name": {
+          "en": "Last poll",
+          "de": "Letzte Abfrage"
+        },
+        "type": "number",
+        "role": "value.time",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
+}

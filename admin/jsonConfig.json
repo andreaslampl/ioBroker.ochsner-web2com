@@ -1,0 +1,43 @@
+{
+  "i18n": true,
+  "type": "tabs",
+  "items": {
+    "connection": {
+      "type": "panel",
+      "label": "Connection",
+      "items": {
+        "host": { "type": "text", "label": "Address of the web2com", "help": "IP address or name, e.g. 192.168.1.x", "xs": 12, "sm": 6 },
+        "interval": { "type": "number", "label": "Poll interval (s)", "min": 10, "max": 3600, "default": 60, "xs": 12, "sm": 3 },
+        "user": { "type": "text", "label": "User", "newLine": true, "xs": 12, "sm": 4 },
+        "password": { "type": "password", "label": "Password", "xs": 12, "sm": 4 },
+        "testHelp": { "type": "staticText", "text": "Find more data points: enter an OID (e.g. /1/3/4/119/1) and read it. The answer shows value, unit and the name the web2com gives it. Save the settings first.", "newLine": true, "xs": 12 },
+        "testOid": { "type": "text", "label": "OID", "newLine": true, "xs": 12, "sm": 4 },
+        "testRead": { "type": "sendTo", "label": "Read OID", "command": "read", "jsonData": "{\"oid\": \"${data.testOid}\"}", "showProcess": true, "useNative": false, "xs": 12, "sm": 3 }
+      }
+    },
+    "points": {
+      "type": "panel",
+      "label": "Data points",
+      "items": {
+        "pointsHelp": { "type": "staticText", "text": "Kind: number, on/off or list (number with texts, e.g. 0=Standby;1=Automatik). Only data points marked as writable can be changed; lists only accept their values. Output: an ioBroker state (e.g. KNX) that gets the value; input: a state whose changes are written to the heat pump.", "xs": 12 },
+        "datapoints": {
+          "type": "table",
+          "xs": 12,
+          "items": [
+            { "type": "text", "attr": "name", "title": "Name", "width": "14%" },
+            { "type": "text", "attr": "oid", "title": "OID", "width": "10%" },
+            { "type": "select", "attr": "kind", "title": "Kind", "width": "8%", "default": "number", "options": [ { "label": "Number", "value": "number" }, { "label": "On/off", "value": "bool" }, { "label": "List", "value": "list" } ] },
+            { "type": "text", "attr": "unit", "title": "Unit", "width": "5%" },
+            { "type": "text", "attr": "texts", "title": "Texts", "width": "14%" },
+            { "type": "checkbox", "attr": "write", "title": "Writable", "width": "5%" },
+            { "type": "number", "attr": "min", "title": "Min", "width": "5%" },
+            { "type": "number", "attr": "max", "title": "Max", "width": "5%" },
+            { "type": "objectId", "attr": "out", "title": "Output (e.g. KNX)", "width": "13%" },
+            { "type": "checkbox", "attr": "outText", "title": "as text", "width": "4%" },
+            { "type": "objectId", "attr": "in", "title": "Input (e.g. KNX)", "width": "13%" }
+          ]
+        }
+      }
+    }
+  }
+}

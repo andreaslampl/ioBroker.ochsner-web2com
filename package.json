@@ -1,0 +1,41 @@
+{
+  "name": "iobroker.ochsner-web2com",
+  "version": "0.1.0",
+  "description": "Ochsner heat pumps via the web2com gateway (SOAP) for ioBroker",
+  "author": "andreaslampl",
+  "license": "MIT",
+  "homepage": "https://github.com/andreaslampl/ioBroker.ochsner-web2com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andreaslampl/ioBroker.ochsner-web2com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andreaslampl/ioBroker.ochsner-web2com/issues"
+  },
+  "keywords": [
+    "ioBroker",
+    "Ochsner",
+    "web2com",
+    "heat pump",
+    "Wärmepumpe",
+    "SOAP"
+  ],
+  "main": "main.js",
+  "files": [
+    "admin/",
+    "lib/",
+    "main.js",
+    "io-package.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.2.3"
+  },
+  "scripts": {
+    "test": "node --test --test-timeout=30000 test/*.test.js"
+  }
+}
