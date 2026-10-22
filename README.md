@@ -69,6 +69,9 @@ Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-
 
 ## Changelog
 
+### 0.1.5
+- Behoben: Instanz zeigte nie „verbunden“.
+
 ### 0.1.4
 - Befehle werden vor den wartenden Abfragen gesendet und von ihnen nicht mehr überschrieben (das web2com ist langsam, eine Runde dauert bis zu einer halben Minute).
 - „Verbunden“ schon beim ersten gelesenen Wert; Log-Stufe debug zeigt die Antwortzeiten.

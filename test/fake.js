@@ -80,6 +80,7 @@ class FakeAdapter extends EventEmitter {
     constructor(options) {
         super();
         this.namespace = `${options.name}.0`;
+        this.connected = true; // like adapter-core: connection to the ioBroker database
         this.config = options.config;
         this.states = {}; // own and foreign: full id -> {val, ack, from}
         this.objects = {};

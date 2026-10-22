@@ -36,6 +36,8 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   (writes + read back first), `holdUntil` (15 s) keeps poll answers from overwriting a commanded
   value, connection true at the first value, debug log per request with time, warning when the read
   back differs from the written value.
+- 0.1.4 field: still not "connected": `this.connected` is adapter-core's own DB connection flag (always
+  true) -> renamed to `gwConnected` in 0.1.5; the fake adapter now has `connected = true` like the real one.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 

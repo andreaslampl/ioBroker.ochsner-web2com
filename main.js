@@ -146,8 +146,8 @@ class OchsnerWeb2com extends utils.Adapter {
             }
         }
         this.log.debug(`Poll round: ${ok} ok, ${failed} failed`);
-        if (!ok && failed && this.connected !== false) {
-            this.connected = false;
+        if (!ok && failed && this.gwConnected !== false) {
+            this.gwConnected = false;
             await this.setState('info.connection', false, true);
         }
         await this.setState('info.lastPoll', Date.now(), true);
@@ -159,8 +159,8 @@ class OchsnerWeb2com extends utils.Adapter {
     /** urgent: read back after a command (before the poll reads, and it may update a held value). */
     async readDp(dp, urgent = false) {
         const r = await this.gw.read(dp.oid, { urgent });
-        if (!this.connected) {
-            this.connected = true;
+        if (!this.gwConnected) {
+            this.gwConnected = true;
             await this.setState('info.connection', true, true);
             this.log.info('web2com connected');
         }

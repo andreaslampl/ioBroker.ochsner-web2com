@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "news": {
+      "0.1.5": {
+        "en": "Fixed: instance never showed \"connected\" (name clash with the ioBroker database connection)",
+        "de": "Behoben: Instanz zeigte nie „verbunden“ (Namensgleichheit mit der ioBroker-Datenbankverbindung)"
+      },
       "0.1.4": {
         "en": "Commands go before waiting poll reads and are not undone by them; connected as soon as the first value arrives; debug log with response times",
         "de": "Befehle vor den wartenden Abfragen und nicht mehr von ihnen überschrieben; „verbunden“ schon beim ersten Wert; Debug-Log mit Antwortzeiten"
