@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "news": {
+      "0.1.7": {
+        "en": "After a command the other values of the same circuit (status, temperatures) are read again after 2, 10 and 40 s",
+        "de": "Nach einem Befehl werden die übrigen Werte desselben Kreises (Status, Temperaturen) nach 2, 10 und 40 s neu gelesen"
+      },
       "0.1.6": {
         "en": "The web2com applies commands with a delay: read back after 2, 5, 10, 20 and 40 s, the new value stays in the object meanwhile",
         "de": "Das web2com übernimmt Befehle verzögert: Zurücklesen nach 2, 5, 10, 20 und 40 s, der neue Wert bleibt so lange im Objekt"

@@ -178,3 +178,16 @@ test('command applied late by the heat pump: kept and confirmed, warning only wh
     assert.equal(st('heizkoerper_betriebsart').val, 4);
     assert.equal(st('heizkoerper_betriebsart').ack, true);
 });
+
+test('after a command the other values of the same circuit are read again at once', async t => {
+    const { adapter, gw } = await start(t, { interval: 3600, readBackMs: 50 });
+    const st = id => adapter.states[`ochsner-web2com.0.values.${id}`];
+    await until(() => adapter.states['ochsner-web2com.0.info.lastPoll']);
+    // the heat pump changes its status when the mode is switched; the next poll would be in an hour
+    gw.values['/1/3/4/119/0'] = '2';
+    gw.values['/1/2/7/121/1'] = '55';
+    adapter.change('values.fussbodenheizung_betriebsart', 4);
+    await until(() => st('fussbodenheizung_status').val === 2, 2000);
+    // other groups (hot water) are not read
+    assert.equal(st('warmwasser_temperatur').val, 48.5);
+});

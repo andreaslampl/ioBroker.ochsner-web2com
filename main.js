@@ -258,6 +258,10 @@ class OchsnerWeb2com extends utils.Adapter {
                 try {
                     const last = i === checks.length - 1;
                     const v = await this.readDp(dp, { urgent: true, force: last });
+                    if (i === 0 || i === 2 || last) {
+                        // the other values of the same circuit (status, flow temperature …) follow the command
+                        await this.readRelated(dp);
+                    }
                     const same = String(v === true ? 1 : v === false ? 0 : v) === conv.value;
                     if (same) {
                         dp.holdUntil = 0;
@@ -280,6 +284,14 @@ class OchsnerWeb2com extends utils.Adapter {
             }, checks[i] - (i ? checks[i - 1] : 0));
         };
         check(0);
+    }
+
+    /** Read the data points of the same group right away (e.g. /1/3/4/… = floor heating circuit). */
+    async readRelated(dp) {
+        const group = dp.oid.split('/').slice(0, 4).join('/');
+        for (const other of this.dps.filter(d => d !== dp && d.oid.startsWith(`${group}/`))) {
+            await this.readDp(other, { urgent: true }).catch(err => this.log.debug(`${other.name}: ${err.message}`));
+        }
     }
 
     /** Admin: "OID testen" - read any OID and show name, value and unit. */

@@ -40,7 +40,10 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   true) -> renamed to `gwConnected` in 0.1.5; the fake adapter now has `connected = true` like the real one.
 - 0.1.5 field: connected works. Writing "0" (Standby) to /1/3/4/107/0 worked; writing "4" (Normal) did
   not - the owner confirms the heat pump stayed in Standby. 0.1.6 reads back up to 40 s (harmless, but a
-  delay was not the cause). Open: why 4 is refused (write response body is in the debug log).
+  delay was not the cause). Later the owner said writing works after all (4 applied with a delay).
+- 0.1.6 field: writing works (also 4 = Normal, applied with a delay); owner wanted the mode/status updated
+  right after a change, not after up to 60 s -> 0.1.7 `readRelated()`: same OID group (first 4 parts, e.g.
+  /1/3/4) read urgently after 2, 10 and 40 s.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 

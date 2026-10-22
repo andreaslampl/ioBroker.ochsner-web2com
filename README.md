@@ -69,6 +69,9 @@ Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-
 
 ## Changelog
 
+### 0.1.7
+- Nach einem Befehl werden die übrigen Werte desselben Kreises (z. B. Status) nach 2, 10 und 40 s neu gelesen – nicht erst bei der nächsten Abfrage.
+
 ### 0.1.6
 - Das web2com übernimmt Befehle verzögert: Zurücklesen nach 2, 5, 10, 20 und 40 s, der neue Wert bleibt so lange im Objekt; Warnung erst, wenn er nach 40 s nicht übernommen wurde.
 
