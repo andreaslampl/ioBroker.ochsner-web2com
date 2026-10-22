@@ -69,6 +69,9 @@ Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-
 
 ## Changelog
 
+### 0.1.2
+- Anmeldung abgelehnt: das Log zeigt, welche Anmeldung das web2com verlangt.
+
 ### 0.1.1
 - „OID lesen“ zeigt die ganze Gruppe ab der OID mit Namen (zum Finden weiterer Datenpunkte, z. B. Kühlen).
 

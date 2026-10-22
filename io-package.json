@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "news": {
+      "0.1.2": {
+        "en": "Login rejected: the log shows which authentication the web2com asks for",
+        "de": "Anmeldung abgelehnt: das Log zeigt, welche Anmeldung das web2com verlangt"
+      },
       "0.1.1": {
         "en": "\"Read OID\" lists the whole group from that OID on, with names (to find more data points, e.g. cooling)",
         "de": "„OID lesen“ zeigt die ganze Gruppe ab der OID mit Namen (zum Finden weiterer Datenpunkte, z. B. Kühlen)"
