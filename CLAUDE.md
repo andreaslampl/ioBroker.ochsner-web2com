@@ -28,6 +28,8 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   (getDpRequest count 30, the flow used count 10 too) and lists OID/name/value/unit to find them.
 - 0.1.1 field: installed on the owner's ioBroker; first try with the right IP: 401 "Anmeldung abgelehnt"
   (credentials or digest variant?) -> 0.1.2 logs the WWW-Authenticate challenge (nonce masked).
+- 0.1.3 field: reading works on the owner's real web2com (values in the objects); the 401 earlier was
+  wrong credentials. Writing and KNX forwarding not yet confirmed.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 
