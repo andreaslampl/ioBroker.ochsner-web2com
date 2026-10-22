@@ -38,9 +38,9 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   back differs from the written value.
 - 0.1.4 field: still not "connected": `this.connected` is adapter-core's own DB connection flag (always
   true) -> renamed to `gwConnected` in 0.1.5; the fake adapter now has `connected = true` like the real one.
-- 0.1.5 field: connected works. Write "4" read back "0" after 2 s - but the earlier write "0" (08:44,
-  thought rejected) had in fact been applied: the web2com applies commands with a delay. 0.1.6: read
-  back up to 5 times until 40 s, warn only then. Exact delay still unknown.
+- 0.1.5 field: connected works. Writing "0" (Standby) to /1/3/4/107/0 worked; writing "4" (Normal) did
+  not - the owner confirms the heat pump stayed in Standby. 0.1.6 reads back up to 40 s (harmless, but a
+  delay was not the cause). Open: why 4 is refused (write response body is in the debug log).
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 
