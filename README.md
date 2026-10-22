@@ -45,7 +45,7 @@ Voreingestellt sind die Werte aus dem Node-RED-Flow; sie erscheinen unter `ochsn
 
 Im Reiter **Datenpunkte** lässt sich die Liste ändern und erweitern (Name, OID, Art, Einheit, Texte,
 schreibbar, Min/Max). Geschrieben wird nur, was als **schreibbar** markiert ist; Listen nehmen nur ihre
-Werte an, Zahlen nur Werte zwischen Min und Max. Nach dem Schreiben liest der Adapter den Wert zurück.
+Werte an, Zahlen nur Werte zwischen Min und Max. Das web2com gibt Befehle verzögert an die Wärmepumpe weiter; der Adapter liest mehrmals zurück (bis 40 s) und bestätigt den Wert, sobald die Wärmepumpe ihn meldet.
 
 **Weitere Datenpunkte finden (z. B. Kühlen):** im Reiter Verbindung eine OID eingeben und
 **OID lesen** – die Antwort zeigt diese und die folgenden OIDs der Gruppe (bis zu 30) mit Wert,
@@ -68,6 +68,9 @@ Pro Datenpunkt optional:
 Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-Flow vermerkt).
 
 ## Changelog
+
+### 0.1.6
+- Das web2com übernimmt Befehle verzögert: Zurücklesen nach 2, 5, 10, 20 und 40 s, der neue Wert bleibt so lange im Objekt; Warnung erst, wenn er nach 40 s nicht übernommen wurde.
 
 ### 0.1.5
 - Behoben: Instanz zeigte nie „verbunden“.

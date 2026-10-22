@@ -14,7 +14,7 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   function nodes), `cleanTable()` (id = slug of the name).
 - `main.js` – poll loop (stops a round on login/network errors), states `values.<slug>` (lists = number
   + common.states), writes only for `write` data points with value checks (list keys, min/max), read
-  back after 1.5 s, `out` mirror (on change, `outText` = text), `in` foreign state -> write (own writes
+  back after 2/5/10/20/40 s (`readBackMs` base, tests use 50) while `holdUntil` keeps the commanded value, `out` mirror (on change, `outText` = text), `in` foreign state -> write (own writes
   ignored via state.from), sendTo `read` for the admin "OID lesen" button. Unit/name of the gateway
   stored in the object on the first read.
 - `test/` – `node --test`; `fake.js` = fake web2com (SOAP + Digest MD5/qop) and fake adapter-core.
@@ -38,6 +38,9 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   back differs from the written value.
 - 0.1.4 field: still not "connected": `this.connected` is adapter-core's own DB connection flag (always
   true) -> renamed to `gwConnected` in 0.1.5; the fake adapter now has `connected = true` like the real one.
+- 0.1.5 field: connected works. Write "4" read back "0" after 2 s - but the earlier write "0" (08:44,
+  thought rejected) had in fact been applied: the web2com applies commands with a delay. 0.1.6: read
+  back up to 5 times until 40 s, warn only then. Exact delay still unknown.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 

@@ -156,8 +156,11 @@ class OchsnerWeb2com extends utils.Adapter {
         }
     }
 
-    /** urgent: read back after a command (before the poll reads, and it may update a held value). */
-    async readDp(dp, urgent = false) {
+    /**
+     * urgent: before the waiting poll reads (read back after a command); force: update the object even
+     * while a commanded value is held.
+     */
+    async readDp(dp, { urgent = false, force = false } = {}) {
         const r = await this.gw.read(dp.oid, { urgent });
         if (!this.gwConnected) {
             this.gwConnected = true;
@@ -178,7 +181,7 @@ class OchsnerWeb2com extends utils.Adapter {
             }
             await this.extendObject(`values.${dp.id}`, { common, native: { oid: dp.oid, gwName: r.name, gwUnit: r.unit, gwDesc: r.desc } });
         }
-        if (!urgent && dp.holdUntil > Date.now()) {
+        if (!force && dp.holdUntil > Date.now()) {
             // a command is on its way: an older poll answer must not undo it in the object
             return val;
         }
@@ -237,27 +240,46 @@ class OchsnerWeb2com extends utils.Adapter {
             await this.setState(`values.${dp.id}`, { val: this.last.has(dp.id) ? this.last.get(dp.id) : null, ack: true });
             return;
         }
-        dp.holdUntil = Date.now() + 15000;
+        // the web2com passes a command on to the heat pump with a delay: read back several times
+        // (2, 5, 10, 20, 40 s) and keep the commanded value in the object meanwhile
+        const base = Number(this.config.readBackMs) || 2000;
+        const checks = [1, 2.5, 5, 10, 20].map(f => Math.round(base * f));
+        dp.holdUntil = Date.now() + checks[checks.length - 1] + base;
         try {
             await this.gw.write(dp.oid, conv.value);
             this.log.info(`${dp.name} = ${conv.value}${dp.states && dp.states[conv.value] ? ` (${dp.states[conv.value]})` : ''} (from ${from})`);
         } catch (err) {
             this.log.warn(`${dp.name}: write failed: ${err.message}`);
         }
-        // the heat pump takes a moment; read back what it really has
         clearTimeout(dp.readBack);
-        dp.readBack = setTimeout(
-            () =>
-                this.readDp(dp, true)
-                    .then(v => {
+        const started = Date.now();
+        const check = i => {
+            dp.readBack = setTimeout(async () => {
+                try {
+                    const last = i === checks.length - 1;
+                    const v = await this.readDp(dp, { urgent: true, force: last });
+                    const same = String(v === true ? 1 : v === false ? 0 : v) === conv.value;
+                    if (same) {
                         dp.holdUntil = 0;
-                        if (String(v === true ? 1 : v === false ? 0 : v) !== conv.value) {
-                            this.log.warn(`${dp.name}: the heat pump reports ${v} after writing ${conv.value} - not accepted (or not yet)`);
+                        if (!last) {
+                            // confirmed: show it (ack) at once
+                            this.last.set(dp.id, v);
+                            await this.setState(`values.${dp.id}`, { val: v, ack: true });
+                            await this.mirror(dp, v);
                         }
-                    })
-                    .catch(err => this.log.warn(`${dp.name}: ${err.message}`)),
-            Number(this.config.readBackMs) || 1500,
-        );
+                        this.log.debug(`${dp.name}: confirmed by the heat pump after ${Math.round((Date.now() - started) / 1000)} s`);
+                    } else if (i < checks.length - 1) {
+                        check(i + 1);
+                    } else {
+                        dp.holdUntil = 0;
+                        this.log.warn(`${dp.name}: the heat pump still reports ${v} ${Math.round((Date.now() - started) / 1000)} s after writing ${conv.value} - not accepted`);
+                    }
+                } catch (err) {
+                    this.log.warn(`${dp.name}: ${err.message}`);
+                }
+            }, checks[i] - (i ? checks[i - 1] : 0));
+        };
+        check(0);
     }
 
     /** Admin: "OID testen" - read any OID and show name, value and unit. */

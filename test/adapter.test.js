@@ -158,3 +158,23 @@ test('slow web2com: connected at the first value, a command goes first and is no
     assert.equal(st('fussbodenheizung_betriebsart').ack, true);
     assert.ok(!adapter.logs.some(l => /not accepted/.test(l)));
 });
+
+test('command applied late by the heat pump: kept and confirmed, warning only when never applied', async t => {
+    const { adapter, gw } = await start(t, { interval: 10, readBackMs: 50 }, { applyDelay: 300, ignore: ['/1/3/5/107/0'] });
+    const st = id => adapter.states[`ochsner-web2com.0.values.${id}`];
+    await until(() => adapter.states['ochsner-web2com.0.info.lastPoll']);
+    adapter.change('values.fussbodenheizung_betriebsart', 4);
+    await until(() => gw.writes.length === 1);
+    // the first read back (50 ms) still sees the old value: the object keeps 4 (not yet confirmed)
+    await new Promise(r => setTimeout(r, 120));
+    assert.equal(st('fussbodenheizung_betriebsart').val, 4);
+    // confirmed after the heat pump took it (300 ms)
+    await until(() => st('fussbodenheizung_betriebsart').ack && st('fussbodenheizung_betriebsart').val === 4, 2000);
+    assert.ok(!adapter.logs.some(l => /not accepted/.test(l)));
+
+    // never applied: warning after the last check (50 ms * 20), then the real value again
+    adapter.change('values.heizkoerper_betriebsart', 1);
+    await until(() => adapter.logs.some(l => /Heizkörper Betriebsart: the heat pump still reports 4 .* after writing 1 - not accepted/.test(l)), 3000);
+    assert.equal(st('heizkoerper_betriebsart').val, 4);
+    assert.equal(st('heizkoerper_betriebsart').ack, true);
+});

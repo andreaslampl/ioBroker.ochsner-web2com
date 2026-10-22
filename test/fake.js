@@ -8,7 +8,7 @@ const Module = require('node:module');
 const { EventEmitter } = require('node:events');
 
 /** Fake web2com: values by OID, Digest auth (MD5, qop=auth), getDp/writeDp. */
-function fakeGateway({ values, user = 'admin', password = 'geheim', names = {}, delay = 0 }) {
+function fakeGateway({ values, user = 'admin', password = 'geheim', names = {}, delay = 0, applyDelay = 0, ignore = [] }) {
     const gw = { values, writes: [], requests: 0, authFailures: 0 };
     const realm = 'web2com';
     const nonce = crypto.randomBytes(8).toString('hex');
@@ -64,7 +64,10 @@ function fakeGateway({ values, user = 'admin', password = 'geheim', names = {}, 
                 const value = (/<value>([^<]*)<\/value>/.exec(body) || [])[1];
                 const index = (/<index>([^<]*)<\/index>/.exec(body) || [])[1];
                 gw.writes.push({ oid, value, index });
-                gw.values[oid] = value;
+                // the real web2com passes commands on to the heat pump with a delay
+                if (!ignore.includes(oid)) {
+                    setTimeout(() => (gw.values[oid] = value), applyDelay);
+                }
                 res.end(env('<ns:writeDpResponse><result>0</result></ns:writeDpResponse>'));
                 return;
             }

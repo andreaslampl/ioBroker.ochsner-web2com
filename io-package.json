@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "news": {
+      "0.1.6": {
+        "en": "The web2com applies commands with a delay: read back after 2, 5, 10, 20 and 40 s, the new value stays in the object meanwhile",
+        "de": "Das web2com übernimmt Befehle verzögert: Zurücklesen nach 2, 5, 10, 20 und 40 s, der neue Wert bleibt so lange im Objekt"
+      },
       "0.1.5": {
         "en": "Fixed: instance never showed \"connected\" (name clash with the ioBroker database connection)",
         "de": "Behoben: Instanz zeigte nie „verbunden“ (Namensgleichheit mit der ioBroker-Datenbankverbindung)"
