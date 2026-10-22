@@ -31,7 +31,7 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
 - 0.1.3 field: reading works on the owner's real web2com (values in the objects); the 401 earlier was
   wrong credentials. Writing and KNX forwarding not yet confirmed.
 - 0.1.3 field: "connected" stayed red and a mode change "was not accepted": the real web2com is slow
-  (~1.5 s per request, a round of 20 ~30 s); connection was set only after the round, and the write
+  (debug log 0.1.4: 0.3-0.7 s per request, a round of 20 ~9 s); connection was set only after the round, and the write
   waited behind the poll reads, which then put the old value back. 0.1.4: priority queue in Web2Com
   (writes + read back first), `holdUntil` (15 s) keeps poll answers from overwriting a commanded
   value, connection true at the first value, debug log per request with time, warning when the read
