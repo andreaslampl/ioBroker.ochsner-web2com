@@ -30,6 +30,12 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   (credentials or digest variant?) -> 0.1.2 logs the WWW-Authenticate challenge (nonce masked).
 - 0.1.3 field: reading works on the owner's real web2com (values in the objects); the 401 earlier was
   wrong credentials. Writing and KNX forwarding not yet confirmed.
+- 0.1.3 field: "connected" stayed red and a mode change "was not accepted": the real web2com is slow
+  (~1.5 s per request, a round of 20 ~30 s); connection was set only after the round, and the write
+  waited behind the poll reads, which then put the old value back. 0.1.4: priority queue in Web2Com
+  (writes + read back first), `holdUntil` (15 s) keeps poll answers from overwriting a commanded
+  value, connection true at the first value, debug log per request with time, warning when the read
+  back differs from the written value.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 

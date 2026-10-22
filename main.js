@@ -145,13 +145,10 @@ class OchsnerWeb2com extends utils.Adapter {
                 }
             }
         }
-        const connected = ok > 0;
-        if (connected !== this.connected) {
-            this.connected = connected;
-            await this.setState('info.connection', connected, true);
-            if (connected) {
-                this.log.info(`web2com connected (${ok} of ${this.dps.length} values${failed ? `, ${failed} failed` : ''})`);
-            }
+        this.log.debug(`Poll round: ${ok} ok, ${failed} failed`);
+        if (!ok && failed && this.connected !== false) {
+            this.connected = false;
+            await this.setState('info.connection', false, true);
         }
         await this.setState('info.lastPoll', Date.now(), true);
         if (!this.stopped) {
@@ -159,8 +156,14 @@ class OchsnerWeb2com extends utils.Adapter {
         }
     }
 
-    async readDp(dp) {
-        const r = await this.gw.read(dp.oid);
+    /** urgent: read back after a command (before the poll reads, and it may update a held value). */
+    async readDp(dp, urgent = false) {
+        const r = await this.gw.read(dp.oid, { urgent });
+        if (!this.connected) {
+            this.connected = true;
+            await this.setState('info.connection', true, true);
+            this.log.info('web2com connected');
+        }
         if (this.errors.has(dp.oid)) {
             this.errors.delete(dp.oid);
             this.log.info(`${dp.name}: readable again`);
@@ -174,6 +177,10 @@ class OchsnerWeb2com extends utils.Adapter {
                 common.unit = r.unit;
             }
             await this.extendObject(`values.${dp.id}`, { common, native: { oid: dp.oid, gwName: r.name, gwUnit: r.unit, gwDesc: r.desc } });
+        }
+        if (!urgent && dp.holdUntil > Date.now()) {
+            // a command is on its way: an older poll answer must not undo it in the object
+            return val;
         }
         this.last.set(dp.id, val);
         await this.setState(`values.${dp.id}`, { val, ack: true });
@@ -230,6 +237,7 @@ class OchsnerWeb2com extends utils.Adapter {
             await this.setState(`values.${dp.id}`, { val: this.last.has(dp.id) ? this.last.get(dp.id) : null, ack: true });
             return;
         }
+        dp.holdUntil = Date.now() + 15000;
         try {
             await this.gw.write(dp.oid, conv.value);
             this.log.info(`${dp.name} = ${conv.value}${dp.states && dp.states[conv.value] ? ` (${dp.states[conv.value]})` : ''} (from ${from})`);
@@ -238,7 +246,18 @@ class OchsnerWeb2com extends utils.Adapter {
         }
         // the heat pump takes a moment; read back what it really has
         clearTimeout(dp.readBack);
-        dp.readBack = setTimeout(() => this.readDp(dp).catch(err => this.log.warn(`${dp.name}: ${err.message}`)), Number(this.config.readBackMs) || 1500);
+        dp.readBack = setTimeout(
+            () =>
+                this.readDp(dp, true)
+                    .then(v => {
+                        dp.holdUntil = 0;
+                        if (String(v === true ? 1 : v === false ? 0 : v) !== conv.value) {
+                            this.log.warn(`${dp.name}: the heat pump reports ${v} after writing ${conv.value} - not accepted (or not yet)`);
+                        }
+                    })
+                    .catch(err => this.log.warn(`${dp.name}: ${err.message}`)),
+            Number(this.config.readBackMs) || 1500,
+        );
     }
 
     /** Admin: "OID testen" - read any OID and show name, value and unit. */

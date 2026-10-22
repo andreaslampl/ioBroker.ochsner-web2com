@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "ochsner-web2com",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "news": {
+      "0.1.4": {
+        "en": "Commands go before waiting poll reads and are not undone by them; connected as soon as the first value arrives; debug log with response times",
+        "de": "Befehle vor den wartenden Abfragen und nicht mehr von ihnen überschrieben; „verbunden“ schon beim ersten Wert; Debug-Log mit Antwortzeiten"
+      },
       "0.1.3": {
         "en": "Address may also be the full URL as in Node-RED (http://…/ws)",
         "de": "Adresse darf auch die ganze URL wie in Node-RED sein (http://…/ws)"

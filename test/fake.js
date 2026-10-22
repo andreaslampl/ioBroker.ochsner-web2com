@@ -8,7 +8,7 @@ const Module = require('node:module');
 const { EventEmitter } = require('node:events');
 
 /** Fake web2com: values by OID, Digest auth (MD5, qop=auth), getDp/writeDp. */
-function fakeGateway({ values, user = 'admin', password = 'geheim', names = {} }) {
+function fakeGateway({ values, user = 'admin', password = 'geheim', names = {}, delay = 0 }) {
     const gw = { values, writes: [], requests: 0, authFailures: 0 };
     const realm = 'web2com';
     const nonce = crypto.randomBytes(8).toString('hex');
@@ -16,7 +16,8 @@ function fakeGateway({ values, user = 'admin', password = 'geheim', names = {} }
     gw.server = http.createServer((req, res) => {
         let body = '';
         req.on('data', c => (body += c));
-        req.on('end', () => {
+        req.on('end', () => setTimeout(answer, delay));
+        const answer = () => {
             gw.requests++;
             const auth = req.headers.authorization || '';
             const p = {};
@@ -68,7 +69,7 @@ function fakeGateway({ values, user = 'admin', password = 'geheim', names = {} }
                 return;
             }
             res.end(env('<SOAP-ENV:Fault><faultstring>unknown request</faultstring></SOAP-ENV:Fault>'));
-        });
+        };
     });
     gw.listen = () => new Promise(r => gw.server.listen(0, '127.0.0.1', () => r(`127.0.0.1:${gw.server.address().port}`)));
     gw.close = () => new Promise(r => gw.server.close(() => r()));

@@ -67,7 +67,8 @@ async function start(t, config = {}, gwOpts = {}) {
 test('adapter: reads all data points, writes modes and set point, forwards to KNX', async t => {
     const { adapter, gw } = await start(t);
     const st = id => adapter.states[`ochsner-web2com.0.values.${id}`];
-    await until(() => adapter.states['ochsner-web2com.0.info.connection'] && adapter.states['ochsner-web2com.0.info.connection'].val === true);
+    await until(() => adapter.states['ochsner-web2com.0.info.lastPoll']);
+    assert.equal(adapter.states['ochsner-web2com.0.info.connection'].val, true);
     assert.equal(st('aussentemperatur').val, -3.2);
     assert.equal(st('warmwasser_temperatur').val, 48.5);
     assert.equal(st('pumpe_fussbodenheizung').val, true);
@@ -139,4 +140,21 @@ test('adapter: wrong password -> not connected, clear message', async t => {
     assert.equal(adapter.states['ochsner-web2com.0.info.connection'].val, false);
     assert.ok(adapter.logs.some(l => /Anmeldung abgelehnt/.test(l)));
     assert.ok(gw.requests < 5, 'stops asking after the login failed');
+});
+
+test('slow web2com: connected at the first value, a command goes first and is not undone by the poll', async t => {
+    const { adapter, gw } = await start(t, {}, { delay: 80 });
+    const st = id => adapter.states[`ochsner-web2com.0.values.${id}`];
+    // connected long before the round of 21 reads (~3.5 s) is over
+    await until(() => adapter.states['ochsner-web2com.0.info.connection'] && adapter.states['ochsner-web2com.0.info.connection'].val === true, 1500);
+    assert.ok(!adapter.states['ochsner-web2com.0.info.lastPoll'], 'round still running');
+    // the floor heating mode is read late in the round; the command comes before it
+    adapter.change('values.fussbodenheizung_betriebsart', 0);
+    await until(() => gw.writes.length === 1, 1500);
+    assert.equal(gw.writes[0].oid, '/1/3/4/107/0');
+    // until the round is over the object must stay at the new value (ack after the read back)
+    await until(() => adapter.states['ochsner-web2com.0.info.lastPoll'], 8000);
+    assert.equal(st('fussbodenheizung_betriebsart').val, 0);
+    assert.equal(st('fussbodenheizung_betriebsart').ack, true);
+    assert.ok(!adapter.logs.some(l => /not accepted/.test(l)));
 });
