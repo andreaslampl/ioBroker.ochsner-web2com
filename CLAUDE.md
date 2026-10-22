@@ -46,7 +46,7 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
   /1/3/4) read urgently after 2, 10 and 40 s.
 - KNX forwarding (`out`/`in`) was only for the Gira HomeServer; the owner no longer needs it (replacing
   the HomeServer with SmartView). Keep it as an option, no further work on it.
-- Cooling is part of the floor heating circuit (/1/3/4/…); the owner adds those data points himself via the
+- Cooling is part of the floor heating circuit (/1/3/4/…); the owner adds those data points via the
   table - no cooling defaults planned.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
