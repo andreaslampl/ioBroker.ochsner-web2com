@@ -44,6 +44,8 @@ never commit it). The adapter replaces that flow, incl. forwarding to KNX.
 - 0.1.6 field: writing works (also 4 = Normal, applied with a delay); owner wanted the mode/status updated
   right after a change, not after up to 60 s -> 0.1.7 `readRelated()`: same OID group (first 4 parts, e.g.
   /1/3/4) read urgently after 2, 10 and 40 s.
+- KNX forwarding (`out`/`in`) was only for the Gira HomeServer; the owner no longer needs it (replacing
+  the HomeServer with SmartView). Keep it as an option, no further work on it.
 - Mode codes for the heating circuits are a union of the flow's texts (0 Standby, 1 Automatik,
   3 Nachheizbetrieb, 4 Normal, 5 Spar, 7 Hand Heizen); 2 for the circuits is unknown.
 
