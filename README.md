@@ -17,7 +17,7 @@ Instanz anlegen und einstellen:
 
 | Einstellung | Bedeutung |
 | --- | --- |
-| Adresse des web2com | IP-Adresse, z. B. `192.168.1.x` |
+| Adresse des web2com | IP-Adresse, z. B. `192.168.1.x` (oder die URL aus Node-RED, `http://192.168.1.x/ws`) |
 | Benutzer / Passwort | wie bei der web2com-Weboberfläche |
 | Abfrage alle (s) | Standard 60 |
 
@@ -68,6 +68,9 @@ Pro Datenpunkt optional:
 Eingang und Ausgang nicht auf denselben Datenpunkt legen (wie schon im Node-RED-Flow vermerkt).
 
 ## Changelog
+
+### 0.1.3
+- Adresse darf auch die ganze URL wie in Node-RED sein (`http://…/ws`).
 
 ### 0.1.2
 - Anmeldung abgelehnt: das Log zeigt, welche Anmeldung das web2com verlangt.

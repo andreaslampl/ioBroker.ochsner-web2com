@@ -126,6 +126,13 @@ test('adapter: reads all data points, writes modes and set point, forwards to KN
     assert.match(lines[1], /^\/1\/2\/1\/125\/8: 12\.75 MWh – Wärmemenge/);
 });
 
+test('address with or without http:// and /ws (as copied from Node-RED)', () => {
+    const { Web2Com } = require('../lib/web2com');
+    for (const host of ['192.168.1.5', 'http://192.168.1.5', 'http://192.168.1.5/ws', 'http://192.168.1.5/ws/']) {
+        assert.equal(new Web2Com({ host }).url, 'http://192.168.1.5/ws', host);
+    }
+});
+
 test('adapter: wrong password -> not connected, clear message', async t => {
     const { adapter, gw } = await start(t, { password: 'falsch' });
     await until(() => adapter.states['ochsner-web2com.0.info.lastPoll']);
